@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1075780415515",
+    "project_id": "flutter-app-learning-73279",
+    "storage_bucket": "flutter-app-learning-73279.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1075780415515:android:a746620e06c4f722bac8be",
+        "android_client_info": {
+          "package_name": "com.example.push_notification_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbTFeS3mA7N4g27W7lzlIj0IaDUuJnBmM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
