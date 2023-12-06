@@ -54,8 +54,8 @@ void main() async {
           payload: payloadData);
     }
   });
-
-  runApp(const MyApp());
+  // check 
+  runApp(const MyApp());     
 }
 
 class MyApp extends StatelessWidget {
