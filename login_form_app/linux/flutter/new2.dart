@@ -953,3 +953,179 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+
+
+
+
+
+
+  _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1930),
+        lastDate: DateTime.now());
+    if (picked != null) {
+      _birthDateCtr.text =
+          "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}";
+    }
+  }
+
+  RegisterModel _createRegisterModel() {
+    return RegisterModel(
+        name: _nameCtr.text.trim(),
+        email: _emailCtr.text.trim(),
+        mobile: _mobileCtr.text.trim(),
+        birthDate: _birthDateCtr.text,
+        aadharNo: _aadharCtr.text.trim(),
+        password: _passwordCtr.text,
+        aadharCard: aadharImage,
+        address: _addressCtr.text.trim(),
+        bloodGroup: _bloodGrpCtr,
+        ownerBio: _bioCtr.text,
+        ownerPhoto: ownerPhoto,
+        pincode: _pincodeCtr.text);
+  }
+
+  bool validateStep1() {
+    // containsLastSpace(_nameCtr.text);
+    if (_nameCtr.text == "" || _nameCtr.text.isEmpty) {
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('please_enter_name')}");
+      return false;
+    } else if (containsLastSpace(_nameCtr.text)) {
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('invalid_name')}");
+      return false;
+    } else if (_emailCtr.text == "" || _emailCtr.text.isEmpty) {
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('please_enter_email')}");
+      return false;
+    }
+    //  else if (containsLastdot(_emailCtr.text)) {
+    //   AvmToast.instance.showErrorMessage(context, "Invalid Email");
+    //   return false;
+    // }
+    else if (_emailCtr.text.contains(" ") ||
+        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+            .hasMatch(_emailCtr.text)) {
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('invalid_email')}");
+      return false;
+    } else if (_mobileCtr.text == "" || _mobileCtr.text.isEmpty) {
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('please_enter_mobile_number')}");
+      return false;
+    } else if (!RegExp(r"^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$")
+        .hasMatch(_mobileCtr.text)) {
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('invalid_mobile_number')}");
+      return false;
+    }
+    //  else if (_addressCtr.text == "" || _addressCtr.text.isEmpty) {
+    //   AvmToast.instance.showErrorMessage(context,
+    //       "${AVMLocalization.of(context)?.getTranslatedValues('please_enter_address')}");
+    //   return false;
+    // }
+    else if (!(_addressCtr.text == "" || _addressCtr.text.isEmpty) &&
+        containsLastSpace(_addressCtr.text)) {
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('please_enter_address')}");
+      return false;
+    }
+    // else if (_pincodeCtr.text == "" || _pincodeCtr.text.isEmpty) {
+    //   AvmToast.instance.showErrorMessage(context,
+    //       "${AVMLocalization.of(context)?.getTranslatedValues('please_enter_pincode')}");
+    //   return false;
+    // }
+    else if (!(_pincodeCtr.text == "" || _pincodeCtr.text.isEmpty) &&
+        containsLastSpace(_pincodeCtr.text)) {
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('invalid_pincode')}");
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  bool validateStep2() {
+    // if (ownerPhoto == null) {
+    //   AvmToast.instance.showErrorMessage(context,
+    //       "${AVMLocalization.of(context)?.getTranslatedValues('please_select_owner_photo')}");
+    //   return false;
+    // }
+    // else if (_birthDateCtr.text == "" || _birthDateCtr.text.isEmpty) {
+    //   AvmToast.instance.showErrorMessage(context,
+    //       "${AVMLocalization.of(context)?.getTranslatedValues('please_enter_date_of_birth')}");
+    //   return false;
+    // } else if (_bloodGrpCtr == null) {
+    //   AvmToast.instance.showErrorMessage(context,
+    //       "${AVMLocalization.of(context)?.getTranslatedValues('please_select_blood_group')}");
+    //   return false;
+    // } else if (_bioCtr.text == "" || _bioCtr.text.isEmpty) {
+    //   AvmToast.instance.showErrorMessage(context,
+    //       "${AVMLocalization.of(context)?.getTranslatedValues('please_enter_owner_bio')}");
+    //   return false;
+    // } else if (containsLastSpace(_bioCtr.text)) {
+    //   AvmToast.instance.showErrorMessage(context,
+    //       "${AVMLocalization.of(context)?.getTranslatedValues('please_enter_valid_bio')}");
+    //   return false;
+    // } else {
+    //   return true;
+    // }
+    return true;
+  }
+
+  bool validateStep3() {
+    // print( RegExp(r"^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$").hasMatch(_aadharCtr.text));
+    AadharValidator aadharValidator = new AadharValidator();
+    String aadhdar = _aadharCtr.text.trim().split(" ").join();
+    bool isValide = aadharValidator.validate(aadhdar);
+    if (_aadharCtr.text == "" || _aadharCtr.text.isEmpty) {
+      print("manoj");
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('please_enter_aadhar_number')}");
+      return false;
+    } else if (!(isValide)) {
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('invalid_aadhar')}");
+      return false;
+    } else if (aadharImage == null) {
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('please_select_aadhar_image')}");
+      return false;
+    } else if (_passwordCtr.text == "" || _passwordCtr.text.isEmpty) {
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('please_enter_password')}");
+      return false;
+    } else if (!RegExp(
+            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+        .hasMatch(_passwordCtr.text)) {
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('password_should_match_given_criteria')}");
+      return false;
+    } else if (_confrimPasswordCtr.text == "" ||
+        _confrimPasswordCtr.text.isEmpty) {
+      AvmToast.instance.showErrorMessage(context,
+          "${AVMLocalization.of(context)?.getTranslatedValues('please_enter_confirm_passowrd')}");
+
+      return false;
+    } else if ((_passwordCtr.text != "" || _passwordCtr.text.isNotEmpty) &&
+        (_confrimPasswordCtr.text != "" ||
+            _confrimPasswordCtr.text.isNotEmpty)) {
+      if (_passwordCtr.text != _confrimPasswordCtr.text) {
+        AvmToast.instance.showErrorMessage(context,
+            "${AVMLocalization.of(context)?.getTranslatedValues('password_should_match_with_confirm_password')}");
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  }
+}
+
+
+
+
